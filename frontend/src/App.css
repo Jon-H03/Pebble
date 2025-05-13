@@ -1,0 +1,166 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem;
+  width: 100%;
+}
+
+/* Navbar */
+.navbar {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem; 
+}
+
+.navbar-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.navbar-menu {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.navbar-link {
+  color: var(--muted-foreground);
+  transition: color 0.2s;
+}
+
+.navbar-link:hover {
+  color: var(--foreground);
+}
+
+.navbar-link.active {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.dashboard-container {
+  width: 100%;
+  padding: 1rem;
+  text-align: left;
+}
+
+/* Improve grid layouts */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .category-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+/* Add spacing between sections */
+.section-divider {
+  height: 1px;
+  background-color: var(--border);
+  margin: 2rem 0;
+  opacity: 0.5;
+}
+
+/* transaction list */
+.transaction-list {
+  margin-top: 1.5rem;
+}
+
+/* Transaction table  */
+.transaction-table {
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background-color: var(--card);
+}
+
+.transaction-header {
+  padding: 1rem;
+  background-color: var(--secondary);
+  font-weight: 500;
+}
+
+/* Transaction row refinements */
+.transaction-row {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.15s;
+}
+
+.transaction-row:last-child {
+  border-bottom: none;
+}
+
+.transaction-row:hover {
+  background-color: color-mix(in srgb, var(--card) 95%, var(--primary) 5%);
+}
+
+/* Dashboard header */
+.dashboard-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .dashboard-header {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+/* Card header styling */
+.card-header {
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.card-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.card-description {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Card content styling */
+.card-content {
+  padding: 1.25rem;
+}
+
+/* Period selector */
+.period-selector {
+  background-color: var(--secondary);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+  .period-selector {
+    margin-top: 0;
+  }
+}
