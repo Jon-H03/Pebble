@@ -38,6 +38,7 @@ export function useTransactionForm({ onAddTransaction }: UseTransactionFormProps
 
         // Reset form
         setAmount('');
+        setName('');
         setCategory('');
         setDescription('');
         setDate(new Date());
