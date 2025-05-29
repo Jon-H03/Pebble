@@ -1,8 +1,6 @@
-import { useMemo } from "react";
+// PeriodSelector.tsx
 import { Calendar } from "lucide-react";
 import { type Period } from "./utilities";
-import { type Transaction } from "@/types/transaction";
-import { format } from "date-fns";
 import {
   Select,
   SelectContent,
@@ -12,92 +10,55 @@ import {
 } from "@/components/ui/select";
 
 interface PeriodSelectorProps {
-  transactions: Transaction[];
   selectedPeriod: Period;
   onPeriodChange: (period: Period) => void;
 }
 
 export function PeriodSelector({
-  transactions,
   selectedPeriod,
   onPeriodChange,
 }: PeriodSelectorProps) {
-  // Build a very simple list of months with data -
-  const monthOptions = useMemo(() => {
-
-    const options = [];
-    
-    // Get current month and year
-    const today = new Date();
-    const currentMonth = today.getMonth();
-    const currentYear = today.getFullYear();
-    
-    // ALWAYS add current month
-    const currentMonthOption = {
-      label: format(today, "MMMM"),
-      value: `${currentMonth}-${currentYear}`
-    };
-    options.push(currentMonthOption);
-    
-    // Check previous month
-    if (transactions.some(tx => {
-      try {
-        const txDate = new Date(tx.date);
-        const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
-        const prevYear = currentMonth === 0 ? currentYear - 1 : currentYear;
-        return txDate.getMonth() === prevMonth && txDate.getFullYear() === prevYear;
-      } catch {
-        return false;
-      }
-    })) {
-      const prevMonthDate = new Date(today);
-      prevMonthDate.setMonth(currentMonth - 1);
-      const prevMonth = prevMonthDate.getMonth();
-      const prevYear = prevMonthDate.getFullYear();
-      
-      const prevMonthOption = {
-        label: format(prevMonthDate, "MMMM"),
-        value: `${prevMonth}-${prevYear}`
-      };
-      options.push(prevMonthOption);
-    }
-    
-    return options;
-  }, [transactions]);
+  // Simple hardcoded months - no logic needed!
+  const monthOptions = [
+    { label: "December", value: "11-2025", month: 11 },
+    { label: "November", value: "10-2025", month: 10 },
+    { label: "October", value: "9-2025", month: 9 },
+    { label: "September", value: "8-2025", month: 8 },
+    { label: "August", value: "7-2025", month: 7 },
+    { label: "July", value: "6-2025", month: 6 },
+    { label: "June", value: "5-2025", month: 5 },
+    { label: "May", value: "4-2025", month: 4 },
+    { label: "April", value: "3-2025", month: 3 },
+    { label: "March", value: "2-2025", month: 2 },
+    { label: "February", value: "1-2025", month: 1 },
+    { label: "January", value: "0-2025", month: 0 },
+  ].filter(option => option.month <= new Date().getMonth());
   
   // Handle period selection change
   const handlePeriodChange = (value: string) => {
-    const [month, year] = value.split("-").map(Number);
-    onPeriodChange({ month, year });
+    const [month] = value.split("-").map(Number);
+    onPeriodChange({ month, year: 2025 });
   };
   
   // Get the selected value
   const selectedValue = `${selectedPeriod.month}-${selectedPeriod.year}`;
   
-  // Check if selection is valid
-  const isValidSelection = monthOptions.some(option => option.value === selectedValue);
-  const effectiveValue = isValidSelection ? selectedValue : monthOptions[0]?.value;
-  
   return (
     <div className="flex items-center gap-2">
       <Calendar className="h-5 w-5 text-muted-foreground" />
       <Select
-        value={effectiveValue}
+        value={selectedValue}
         onValueChange={handlePeriodChange}
       >
-        <SelectTrigger className="w-[130px]">
+        <SelectTrigger className="w-[120px]">
           <SelectValue placeholder="Select Month" />
         </SelectTrigger>
         <SelectContent>
-          {monthOptions.length > 0 ? (
-            monthOptions.map(option => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))
-          ) : (
-            <SelectItem value="current">Current Month</SelectItem>
-          )}
+          {monthOptions.map(option => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
     </div>
