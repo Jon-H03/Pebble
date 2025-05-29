@@ -49,13 +49,8 @@ export const handler: Handler = async (event, context) => {
       };
     }
     
-    // Add ID if not provided
-    if (!transaction.id) {
-      transaction.id = Date.now().toString();
-    }
-    
     // Process the transaction
-    // const result = await addTransaction(transaction);
+    const result = await addTransaction(transaction);
     
     // For now, just echo back the transaction with success flag
     return {
@@ -64,7 +59,8 @@ export const handler: Handler = async (event, context) => {
       body: JSON.stringify({ 
         success: true, 
         data: transaction,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        result: result
       })
     };
   } catch (error) {
@@ -73,7 +69,7 @@ export const handler: Handler = async (event, context) => {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         error: 'Internal Server Error',
         message: error instanceof Error ? error.message : 'Unknown error'
       })

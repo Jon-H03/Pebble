@@ -1,5 +1,19 @@
 import { type Transaction } from "../types/transaction";
-import { sheets_v4 } from "googleapis";
+import { google, sheets_v4 } from "googleapis";
+import { GoogleAuth } from "google-auth-library";
+
+/* 
+  Create authentication using environment variables
+*/
+function createAuth() {
+  return new GoogleAuth({
+    credentials: {
+      client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+      private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"), // Needed to convert to actual newlines
+    },
+    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+  });
+}
 
 /* 
   Function to add new month to existing spradsheet.
@@ -9,13 +23,7 @@ export async function addMonthToSpreadsheet(
   date: Date | string = new Date()
 ): Promise<String> {
   // Setup google sheets and auth
-  const { google } = require("googleapis");
-  const { GoogleAuth } = require("google-auth-library");
-
-  const auth = new GoogleAuth({
-    scopes: "https://www.googleapis.com/auth/spreadsheets",
-  });
-
+  const auth = createAuth();
   const sheets = google.sheets({ version: "v4", auth });
 
   // Convert to Date object if it's a string
@@ -41,10 +49,15 @@ export async function addMonthToSpreadsheet(
   } ${transactionDate.getFullYear()}`;
 
   try {
+    // Get existing sheets to check if month already exists
+    const spreadsheet = await sheets.spreadsheets.get({
+      spreadsheetId,
+    });
+
     const existingSheets =
-      (await sheets.spreadsheets?.map(
+      spreadsheet.data.sheets?.map(
         (sheet: sheets_v4.Schema$Sheet) => sheet.properties?.title || ""
-      )) || [];
+      ) || [];
 
     // If the sheet already exists, nothing to do
     if (existingSheets.includes(sheetName)) {
@@ -86,12 +99,10 @@ export async function createNewSheet(
     // Add headers to the new sheet
     await sheets.spreadsheets.values.update({
       spreadsheetId,
-      range: `${sheetName}!A1:G1`,
+      range: `${sheetName}!A1:F1`,
       valueInputOption: "RAW",
       requestBody: {
-        values: [
-          ["ID", "Date", "Type", "Amount", "Name", "Category", "Description"],
-        ],
+        values: [["Date", "Name", "Type", "Category", "Amount", "Description"]],
       },
     });
 
@@ -156,13 +167,7 @@ function getSheetIdByTitle(
 */
 export async function addTransaction(transaction: Transaction) {
   // Setup google sheets and auth
-  const { google } = require("googleapis");
-  const { GoogleAuth } = require("google-auth-library");
-
-  const auth = new GoogleAuth({
-    scopes: "https://www.googleapis.com/auth/spreadsheets",
-  });
-
+  const auth = createAuth();
   const sheets = google.sheets({ version: "v4", auth });
   const spreadsheetId = process.env.SPREADSHEET_ID as string;
 
@@ -176,28 +181,23 @@ export async function addTransaction(transaction: Transaction) {
     // Add the transaction to the sheet
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: `${sheetName}!A:G`,
+      range: `${sheetName}!A:F`,
       valueInputOption: "USER_ENTERED",
       requestBody: {
         values: [
           [
-            transaction.id,
             transaction.date,
-            transaction.type,
-            transaction.amount,
             transaction.name,
+            transaction.type,
             transaction.category,
-            transaction.description,
+            transaction.amount,
+            transaction.description || "",
           ],
         ],
       },
     });
 
-    return {
-      success: true,
-      sheetName,
-      transaction,
-    };
+
   } catch (error) {
     console.error("Error adding transaction:", error);
     throw error;
