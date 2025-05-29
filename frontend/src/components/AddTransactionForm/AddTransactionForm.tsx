@@ -29,10 +29,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-type AddTransactionFormProps = {
-  onAddTransaction: (formData: TransactionFormData) => void;
-};
-
 function sanitizeDecimalInput(value: string): string {
   const parts = value.split(".");
 
@@ -45,9 +41,7 @@ function sanitizeDecimalInput(value: string): string {
   return dec.length > 0 ? `${int}.${dec.slice(0, 2)}` : int;
 }
 
-export function AddTransactionForm({
-  onAddTransaction,
-}: AddTransactionFormProps) {
+export function AddTransactionForm() {
   const {
     date,
     setDate,
@@ -62,7 +56,15 @@ export function AddTransactionForm({
     description,
     setDescription,
     handleSubmit,
-  } = useTransactionForm({ onAddTransaction });
+  } = useTransactionForm({
+    onSuccess: () => {
+      console.log('Transaction successfully added!');
+
+    },
+    onError: (error) => {
+      console.error('Failed to add transaction:', error);
+    }
+  });
 
   // Get the appropriate categories based on expense type
   const categories =
