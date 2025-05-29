@@ -22,11 +22,11 @@ export function TransactionsList({
   title = "Recent Transactions",
   description = "Your financial activity for this period",
 }: TransactionsCardProps) {
-  const [filter, setFilter] = useState<"all" | "income" | "expense">("all");
+  const [filter, setFilter] = useState<"All" | "Income" | "Expense">("All");
 
   // Filter transactions based on selected tab
   const filteredTransactions = transactions.filter((tx) => {
-    if (filter === "all") return true;
+    if (filter === "All") return true;
     return tx.type === filter;
   });
 
@@ -42,14 +42,14 @@ export function TransactionsList({
           <Tabs
             value={filter}
             onValueChange={(value) =>
-              setFilter(value as "all" | "income" | "expense")
+              setFilter(value as "All" | "Income" | "Expense")
             }
             className="mb-4"
           >
             <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger value="income">Income</TabsTrigger>
-              <TabsTrigger value="expense">Expenses</TabsTrigger>
+              <TabsTrigger value="All">All</TabsTrigger>
+              <TabsTrigger value="Income">Income</TabsTrigger>
+              <TabsTrigger value="Expense">Expenses</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
@@ -69,7 +69,7 @@ export function TransactionsList({
                   
                   <div className="divide-y divide-gray-200 bg-white">
                     {filteredTransactions.map((tx) => (
-                      <div key={tx.id} className="grid grid-cols-4 gap-x-4 py-4 px-4 hover:bg-gray-50">
+                      <div className="grid grid-cols-4 gap-x-4 py-4 px-4 hover:bg-gray-50">
                         <div className="w-32 truncate text-sm font-medium text-gray-900">
                           {formatTransactionDate(tx.date)}
                         </div>
@@ -90,10 +90,10 @@ export function TransactionsList({
                         </div>
                         <div
                           className={`text-sm font-medium text-right ${
-                            tx.type === "expense" ? "text-red-600" : "text-green-600"
+                            tx.type === "Expense" ? "text-red-600" : "text-green-600"
                           }`}
                         >
-                          {tx.type === "expense" ? "-" : "+"}
+                          {tx.type === "Expense" ? "-" : "+"}
                           {formatCurrency(tx.amount)}
                         </div>
                       </div>
@@ -105,9 +105,9 @@ export function TransactionsList({
           ) : (
             <div className="text-center py-10 text-muted-foreground border rounded-md">
               No{" "}
-              {filter === "all"
+              {filter === "All"
                 ? "transactions"
-                : filter === "income"
+                : filter === "Income"
                 ? "income"
                 : "expenses"}{" "}
               found for this period.
