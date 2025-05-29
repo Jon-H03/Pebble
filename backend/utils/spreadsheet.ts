@@ -188,7 +188,7 @@ export async function addTransaction(transaction: Transaction) {
           [
             transaction.date,
             transaction.name,
-            transaction.type,
+            transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1),  // Capitalize transaction type
             transaction.category,
             transaction.amount,
             transaction.description || "",
@@ -216,4 +216,50 @@ export function isValidTransaction(transaction: Transaction) {
     typeof transaction.name === "string" &&
     typeof transaction.category === "string"
   );
+}
+
+/* 
+  Function to fetch transactions for a specific month
+*/
+export async function getTransactionsForMonth(month: number, year: number) {
+  const auth = createAuth();
+  const sheets = google.sheets({ version: 'v4', auth });
+  const spreadsheetId = process.env.SPREADSHEET_ID;
+
+  const monthNames = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+  ];
+  const sheetName = `${monthNames[month]} ${year}`;
+
+  try {
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: `${sheetName}!A:F`
+    });
+
+    const rows = response.data.values;
+
+    // If no data, or only headers, return empty array
+    if (!rows || rows.length <= 1) {
+      return [];
+    }
+
+    // Convert rows to transaction objects (skipping header row)
+    const transactions = rows.slice(1).map((row, index) => ({
+      id: index + 1,
+      date: row[0],
+      name: row[1],
+      type: row[2],
+      category: row[3],
+      amount: parseFloat(row[4]) || 0,
+      description: row[5] || ""
+    }));
+
+    return transactions
+  } catch (error) {
+    // Sheet doesn't exist for this month, so return empty array
+    console.log(`No data found for ${sheetName}`);
+    return [];
+  }
 }
