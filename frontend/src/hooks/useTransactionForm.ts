@@ -11,8 +11,8 @@ export function useTransactionForm({
   onSuccess, onError,
 }: UseTransactionFormProps) {
   const [date, setDate] = useState<Date>(new Date());
-  const [transactionType, setTransactionType] = useState<"expense" | "income">(
-    "expense"
+  const [transactionType, setTransactionType] = useState<"Expense" | "Income">(
+    "Expense"
   );
   const [amount, setAmount] = useState<string>("");
   const [name, setName] = useState<string>("");

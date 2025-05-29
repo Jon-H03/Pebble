@@ -83,9 +83,9 @@ export function Dashboard() {
   const filteredTransactions = useMemo(() => {
     // Filter based on the selected transaction type
     if (transactionType === "expense") {
-      return transactions.filter((tx) => tx.type === "expense");
+      return transactions.filter((tx) => tx.type === "Expense");
     } else if (transactionType === "income") {
-      return transactions.filter((tx) => tx.type === "income");
+      return transactions.filter((tx) => tx.type === "Income");
     }
     return transactions;
   }, [transactions, transactionType]);

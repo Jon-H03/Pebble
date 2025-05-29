@@ -1,5 +1,4 @@
 import { expenseCategories, incomeCategories } from "./categories";
-import { type TransactionFormData } from "@/types/transaction";
 import { useTransactionForm } from "@/hooks/useTransactionForm";
 // shadcn imports
 import {
@@ -68,7 +67,7 @@ export function AddTransactionForm() {
 
   // Get the appropriate categories based on expense type
   const categories =
-    transactionType === "expense" ? expenseCategories : incomeCategories;
+    transactionType === "Expense" ? expenseCategories : incomeCategories;
 
   return (
     <Card className="mt-[1em]">
@@ -84,7 +83,7 @@ export function AddTransactionForm() {
           <Tabs
             value={transactionType}
             onValueChange={(value) =>
-              setTransactionType(value as "expense" | "income")
+              setTransactionType(value as "Expense" | "Income")
             }
             className="w-full"
           >

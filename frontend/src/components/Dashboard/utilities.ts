@@ -24,9 +24,6 @@ export interface FinancialSummary {
   net: number;
   topExpenseCategories: [string, number][];
   topIncomeCategories: [string, number][];
-  budget: number;
-  budgetRemaining: number;
-  budgetPercentage: number;
 }
 
 // Get transactions for a specific month and year
@@ -53,20 +50,19 @@ export const getTransactionsForPeriod = (
 // Calculates financial summary for current month
 export const calculateFinancialSummary = (
   transactions: Transaction[],
-  period: Period,
-  monthlyBudget: number = 4000 // Default budget amount
+  period: Period
 ): FinancialSummary => {
   // Get transactions for the specified period
-  const periodTransactions = getTransactionsForPeriod(transactions, period);
+  const periodTransactions = transactions;
   
   // Calculate income total
   const income = periodTransactions
-    .filter(tx => tx.type === "income")
+    .filter(tx => tx.type === "Income")
     .reduce((sum, tx) => sum + tx.amount, 0);
     
   // Calculate expenses total
   const expenses = periodTransactions
-    .filter(tx => tx.type === "expense")
+    .filter(tx => tx.type === "Expense")
     .reduce((sum, tx) => sum + tx.amount, 0);
     
   // Calculate net (income - expenses)
@@ -76,7 +72,7 @@ export const calculateFinancialSummary = (
   const expensesByCategory: Record<string, number> = {};
   
   periodTransactions
-    .filter(tx => tx.type === "expense")
+    .filter(tx => tx.type === "Expense")
     .forEach(tx => {
       expensesByCategory[tx.category] = (expensesByCategory[tx.category] || 0) + tx.amount;
     });
@@ -90,7 +86,7 @@ export const calculateFinancialSummary = (
   const incomeByCategory: Record<string, number> = {};
   
   periodTransactions
-    .filter(tx => tx.type === "income")
+    .filter(tx => tx.type === "Income")
     .forEach(tx => {
       incomeByCategory[tx.category] = (incomeByCategory[tx.category] || 0) + tx.amount;
     });
@@ -100,9 +96,6 @@ export const calculateFinancialSummary = (
     .sort(([, amountA], [, amountB]) => amountB - amountA)
     .slice(0, 3);
     
-  // Calculate budget metrics
-  const budgetRemaining = monthlyBudget - expenses;
-  const budgetPercentage = Math.min(100, Math.round((expenses / monthlyBudget) * 100));
   
   return {
     income,
@@ -110,9 +103,6 @@ export const calculateFinancialSummary = (
     net,
     topExpenseCategories,
     topIncomeCategories,
-    budget: monthlyBudget,
-    budgetRemaining,
-    budgetPercentage
   };
 };
 
