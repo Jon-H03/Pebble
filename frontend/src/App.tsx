@@ -1,9 +1,17 @@
+import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AddTransactionForm } from "./components/AddTransactionForm/AddTransactionForm";
 import { Dashboard } from "./components/Dashboard/Dashboard";
+import { Auth } from "./components/Auth/Auth";
 import "./App.css";
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  if (!isAuthenticated) {
+    return <Auth onAuthenticated={() => setIsAuthenticated(true)} />;
+  }
+
   return (
     <div className="container mx-auto p-4 max-w-5xl">
       <header className="mb-8">
