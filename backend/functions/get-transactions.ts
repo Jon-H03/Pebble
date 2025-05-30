@@ -3,7 +3,7 @@ import { getTransactionsForMonth } from "../utils/spreadsheet";
 
 export const handler: Handler = async (event, context) => {
   const headers = {
-    "Access-Control-Allow-Origin": process.env.FRONTEND_URL || "*",
+    "Access-Control-Allow-Origin": process.env.FRONTEND_URL!,
     "Access-Control-Allow-Headers": "Content-Type, X-API-Key",
     "Access-Control-Allow-Methods": "GET, OPTIONS",
   };

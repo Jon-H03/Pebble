@@ -5,7 +5,7 @@ import { Handler } from "@netlify/functions";
 export const handler: Handler = async (event, context) => {
   // Set headers for all responses
   const headers = {
-    "Access-Control-Allow-Origin": process.env.FRONTEND_URL || "*",
+    "Access-Control-Allow-Origin": process.env.FRONTEND_URL!,
     "Access-Control-Allow-Headers": "Content-Type, X-API-Key",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
   };
