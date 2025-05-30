@@ -211,7 +211,7 @@ export function isValidTransaction(transaction: Transaction) {
   return (
     transaction &&
     typeof transaction.date === "string" &&
-    (transaction.type === "income" || transaction.type === "expense") &&
+    (transaction.type === "Income" || transaction.type === "Expense") &&
     typeof transaction.amount === "number" &&
     typeof transaction.name === "string" &&
     typeof transaction.category === "string"
