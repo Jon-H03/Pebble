@@ -4,12 +4,18 @@ import { getTransactionsForMonth } from "../utils/spreadsheet";
 export const handler: Handler = async (event, context) => {
   const headers = {
     "Access-Control-Allow-Origin": process.env.FRONTEND_URL || "*",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Headers": "Content-Type, X-API-Key",
     "Access-Control-Allow-Methods": "GET, OPTIONS",
   };
 
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 200, headers, body: "" };
+  }
+
+  // Check if API key present after options
+  const apiKey = event.headers["x-api-key"];
+  if (!apiKey || apiKey !== process.env.API_KEY) {
+    return { statusCode: 401, headers: headers, body: JSON.stringify({ error: "Unauthorized" }) };
   }
 
   if (event.httpMethod !== "GET") {
