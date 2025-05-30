@@ -15,7 +15,7 @@ import { TransactionsList } from "./TransactionList";
 
 type SortField = "date" | "amount" | "category" | "name";
 type SortOrder = "asc" | "desc";
-type TransactionType = "all" | "expense" | "income";
+type TransactionType = "All" | "Expense" | "Income";
 
 export function Dashboard() {
   // Use state to fetch and load transactions
@@ -33,12 +33,12 @@ export function Dashboard() {
   });
 
   // State for transaction filtering
-  const [transactionType, setTransactionType] =
-    useState<TransactionType>("all");
+  const [transactionType, _setTransactionType] =
+    useState<TransactionType>("All");
 
   // State for sorting
-  const [sortBy, setSortBy] = useState<SortField>("date");
-  const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
+  const [sortBy, _setSortBy] = useState<SortField>("date");
+  const [sortOrder, _setSortOrder] = useState<SortOrder>("desc");
 
   // Fetch transactions when period changes
   useEffect(() => {
@@ -70,21 +70,15 @@ export function Dashboard() {
 
   // Calculate financial summary for current period
   const financialSummary = useMemo(() => {
-    console.log("Selected data:", transactions);
-    console.log("Selected Period:", selectedPeriod);
-    console.log(
-      "Financial Summary:",
-      calculateFinancialSummary(transactions, selectedPeriod)
-    );
-    return calculateFinancialSummary(transactions, selectedPeriod);
-  }, [transactions, selectedPeriod]);
+    return calculateFinancialSummary(transactions);
+  }, [transactions]);
 
   // Get transactions for the selected period and filter by type
   const filteredTransactions = useMemo(() => {
     // Filter based on the selected transaction type
-    if (transactionType === "expense") {
+    if (transactionType === "Expense") {
       return transactions.filter((tx) => tx.type === "Expense");
-    } else if (transactionType === "income") {
+    } else if (transactionType === "Income") {
       return transactions.filter((tx) => tx.type === "Income");
     }
     return transactions;

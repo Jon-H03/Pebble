@@ -49,8 +49,7 @@ export const getTransactionsForPeriod = (
 
 // Calculates financial summary for current month
 export const calculateFinancialSummary = (
-  transactions: Transaction[],
-  period: Period
+  transactions: Transaction[]
 ): FinancialSummary => {
   // Get transactions for the specified period
   const periodTransactions = transactions;
