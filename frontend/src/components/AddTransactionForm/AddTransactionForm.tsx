@@ -88,8 +88,8 @@ export function AddTransactionForm() {
             className="w-full"
           >
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="expense">Expense</TabsTrigger>
-              <TabsTrigger value="income">Income</TabsTrigger>
+              <TabsTrigger value="Expense">Expense</TabsTrigger>
+              <TabsTrigger value="Income">Income</TabsTrigger>
             </TabsList>
           </Tabs>
 
