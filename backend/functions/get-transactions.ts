@@ -15,7 +15,11 @@ export const handler: Handler = async (event, context) => {
   // Check if API key present after options
   const apiKey = event.headers["x-api-key"];
   if (!apiKey || apiKey !== process.env.API_KEY) {
-    return { statusCode: 401, headers: headers, body: JSON.stringify({ error: "Unauthorized" }) };
+    return {
+      statusCode: 401,
+      headers: headers,
+      body: JSON.stringify({ error: "Unauthorized" }),
+    };
   }
 
   if (event.httpMethod !== "GET") {

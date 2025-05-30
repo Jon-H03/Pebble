@@ -1,5 +1,4 @@
 import { isValidTransaction, addTransaction } from "../utils/spreadsheet";
-import { type Transaction } from "../types/transaction";
 import { Handler } from "@netlify/functions";
 
 export const handler: Handler = async (event, context) => {
